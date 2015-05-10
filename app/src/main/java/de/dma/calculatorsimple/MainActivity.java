@@ -1,18 +1,24 @@
 package de.dma.calculatorsimple;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 
 
 public class MainActivity extends Activity {
+
+    private double result;
+    private boolean ok = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +40,9 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 TextView exp = (TextView) findViewById(R.id.expression);
-                exp.setText(exp.getText().toString().substring(0, exp.getText().length() - 1));
+
+                if (exp.getText().toString().length() > 0)
+                    exp.setText(exp.getText().toString().substring(0, exp.getText().length() - 1));
             }
         });
 
@@ -45,10 +53,21 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 TextView expression = (TextView) findViewById(R.id.expression);
 
-                Expression e = new ExpressionBuilder(expression.getText().toString()).build();
-                double result = e.evaluate();
+                if (expression.getText().toString() != "") {
+                    if (expression.getText().toString().substring(expression.getText().length() - 1, expression.getText().length()).matches("-?\\d+(\\.\\d+)?")) {
+                        try {
+                            Expression e = new ExpressionBuilder(expression.getText().toString()).build();
+                            result = e.evaluate();
+                            expression.setText(Double.toString(result));
+                        }
+                        catch (ArithmeticException ex) {
+                            Context context = getApplicationContext();
 
-                expression.setText(Double.toString(result));
+                            Toast toast = Toast.makeText(context, "Ungültige Rechenoperation!", Toast.LENGTH_LONG);
+                            toast.show();
+                        }
+                    }
+                }
             }
         });
     }
@@ -87,49 +106,69 @@ public class MainActivity extends Activity {
                 exp.append("");
                 break;
             case R.id.button_division:
-                exp.append("/");
+                if (ok)
+                    exp.append("/");
+                ok = false;
                 break;
             case R.id.button_7:
                 exp.append("7");
+                ok = true;
                 break;
             case R.id.button_8:
                 exp.append("8");
+                ok = true;
                 break;
             case R.id.button_9:
                 exp.append("9");
+                ok = true;
                 break;
             case R.id.button_multiply:
-                exp.append("*");
+                if (ok)
+                    exp.append("*");
+                ok = false;
                 break;
             case R.id.button_4:
                 exp.append("4");
+                ok = true;
                 break;
             case R.id.button_5:
                 exp.append("5");
+                ok = true;
                 break;
             case R.id.button_6:
                 exp.append("6");
+                ok = true;
                 break;
             case R.id.button_addition:
-                exp.append("+");
+                if (ok)
+                    exp.append("+");
+                ok = false;
                 break;
             case R.id.button_1:
                 exp.append("1");
+                ok = true;
                 break;
             case R.id.button_2:
                 exp.append("2");
+                ok = true;
                 break;
             case R.id.button_3:
                 exp.append("3");
+                ok = true;
                 break;
             case R.id.button_minus:
-                exp.append("-");
+                if (ok)
+                    exp.append("-");
+                ok = false;
                 break;
             case R.id.button_0:
                 exp.append("0");
+                ok = true;
                 break;
             case R.id.button_dot:
-                exp.append(".");
+                if (ok)
+                    exp.append(".");
+                ok = false;
                 break;
             default:
                 break;
