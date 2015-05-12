@@ -63,8 +63,12 @@ public class MainActivity extends Activity {
                         catch (ArithmeticException ex) {
                             Context context = getApplicationContext();
 
-                            Toast toast = Toast.makeText(context, "Ungültige Rechenoperation!", Toast.LENGTH_LONG);
-                            toast.show();
+                            Toast.makeText(context, "Ungültige Rechenoperation!", Toast.LENGTH_LONG).show();
+                        }
+                        catch (NumberFormatException ex) {
+                            Context context = getApplicationContext();
+
+                            Toast.makeText(context, "Ungültige Rechenoperation!", Toast.LENGTH_LONG).show();
                         }
                     }
                 }
